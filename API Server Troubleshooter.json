@@ -6,7 +6,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "8.4.7"
+      "version": "8.4.2"
     },
     {
       "type": "panel",
@@ -24,18 +24,6 @@
       "type": "panel",
       "id": "stat",
       "name": "Stat",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "state-timeline",
-      "name": "State timeline",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
       "version": ""
     },
     {
@@ -67,12 +55,12 @@
       }
     ]
   },
-  "description": "shancor charts",
+  "description": "Dashboards for obsessive people",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1652889194278,
+  "iteration": 1653048779412,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -126,7 +114,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.7",
+      "pluginVersion": "8.4.2",
       "targets": [
         {
           "datasource": {
@@ -196,7 +184,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.7",
+      "pluginVersion": "8.4.2",
       "targets": [
         {
           "datasource": {
@@ -269,7 +257,7 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.4.7",
+      "pluginVersion": "8.4.2",
       "targets": [
         {
           "datasource": {
@@ -339,7 +327,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.7",
+      "pluginVersion": "8.4.2",
       "targets": [
         {
           "datasource": {
@@ -408,7 +396,7 @@
         },
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.4.7",
+      "pluginVersion": "8.4.2",
       "targets": [
         {
           "datasource": {
@@ -416,12 +404,13 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "exemplar": true,
+          "exemplar": false,
           "expr": "max by (name)(max_over_time(aggregator_unavailable_apiservice{job=\"$job\"}[$__interval])) > 0.1",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "interval": "$__interval",
           "legendFormat": "{{name}}",
+          "range": false,
           "refId": "A"
         }
       ],
@@ -453,11 +442,10 @@
       "hideZeroBuckets": true,
       "highlightCards": true,
       "id": 18,
-      "interval": "2m",
       "legend": {
         "show": false
       },
-      "maxDataPoints": 100,
+      "maxDataPoints": 200,
       "pluginVersion": "8.2.5",
       "reverseYBuckets": false,
       "targets": [
@@ -466,11 +454,12 @@
             "type": "prometheus",
             "uid": "$datasource"
           },
+          "editorMode": "code",
           "exemplar": false,
           "expr": "max(increase(apiserver_request_duration_seconds_bucket{job=\"$job\",subresource!=\"status\",subresource!=\"token\",subresource!=\"scale\",subresource!=\"/healthz\",subresource!=\"binding\",subresource!=\"proxy\",verb!=\"WATCH\"}[$__rate_interval])) by (le)",
           "format": "heatmap",
           "instant": false,
-          "interval": "",
+          "interval": "$__rate_interval",
           "legendFormat": "{{le}}",
           "refId": "A"
         }
@@ -520,7 +509,6 @@
       "hideZeroBuckets": true,
       "highlightCards": true,
       "id": 30,
-      "interval": "2m",
       "legend": {
         "show": false
       },
@@ -532,11 +520,13 @@
             "type": "prometheus",
             "uid": "$datasource"
           },
+          "editorMode": "code",
           "exemplar": false,
           "expr": "max by (le)(increase(etcd_request_duration_seconds_bucket{job=\"$job\"}[$__rate_interval]))",
           "format": "heatmap",
-          "interval": "",
+          "interval": "$__rate_interval",
           "legendFormat": "{{le}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -563,7 +553,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": " ",
+      "description": " Using recording rules via kube stack prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -574,17 +564,17 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "drawStyle": "bars",
-            "fillOpacity": 4,
-            "gradientMode": "none",
+            "drawStyle": "points",
+            "fillOpacity": 19,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "smooth",
-            "lineWidth": 7,
-            "pointSize": 6,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 13,
             "scaleDistribution": {
               "type": "linear"
             },
@@ -623,15 +613,17 @@
         "y": 22
       },
       "id": 8,
-      "interval": "2m",
-      "maxDataPoints": 1000,
+      "maxDataPoints": 2000,
       "options": {
         "legend": {
           "calcs": [
+            "lastNotNull",
             "max"
           ],
-          "displayMode": "hidden",
-          "placement": "bottom"
+          "displayMode": "table",
+          "placement": "right",
+          "sortBy": "Max",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -647,16 +639,33 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "histogram_quantile(0.90, max without(instance,scope,version, group,dry_run) (rate(apiserver_request_duration_seconds_bucket{job=\"$job\",subresource!=\"status\",subresource!=\"token\",subresource!=\"scale\",subresource!=\"/healthz\",subresource!=\"binding\",subresource!=\"proxy\",verb!=\"WATCH\"}[$__rate_interval])))",
+          "expr": "topk(3, histogram_quantile(0.90, max without(instance,scope,version,dry_run) (increase(apiserver_request_duration_seconds_bucket{job=\"$job\",subresource!=\"status\",subresource!=\"token\",subresource!=\"scale\",subresource!=\"/healthz\",subresource!=\"binding\",subresource!=\"proxy\",verb!=\"WATCH\"}[$__rate_interval]))))",
           "format": "time_series",
+          "hide": true,
           "instant": false,
           "interval": "$__rate_interval",
           "intervalFactor": 1,
-          "legendFormat": "{{resource}} {{subresource}} {{verb}} ",
+          "legendFormat": "{{resource}}.{{group}}{{verb}} ",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "topk(3, cluster_quantile:apiserver_request_duration_seconds:histogram_quantile{job=\"apiserver\",quantile=\"0.9\"})",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "5m",
+          "intervalFactor": 1,
+          "legendFormat": "{{resource}}.{{group}}: {{verb}} ",
+          "refId": "B"
         }
       ],
-      "title": "Slowest API call by Object/VERB",
+      "title": "Top 5 Slowest Requests (P90) - 5min",
       "transparent": true,
       "type": "timeseries"
     },
@@ -700,6 +709,7 @@
               "mode": "off"
             }
           },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -714,148 +724,12 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "reqps"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.136.142:443 2xx"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.189.176:443 5xx"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "super-light-red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.189.176:443 2xx"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "light-blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.136.142:443 4xx"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "super-light-yellow",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.189.176:443 4xx"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-yellow",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.136.142:443"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "light-blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.189.176:443"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "light-purple",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.125.195:443"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "purple",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.128.251:443"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 12,
         "w": 24,
         "x": 0,
         "y": 33
@@ -915,8 +789,8 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 58,
+            "drawStyle": "bars",
+            "fillOpacity": 20,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -939,6 +813,7 @@
               "mode": "off"
             }
           },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -953,7 +828,7 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "cps"
         },
         "overrides": [
           {
@@ -1097,10 +972,9 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 45
       },
       "id": 45,
-      "interval": "2m",
       "links": [],
       "maxDataPoints": 400,
       "options": {
@@ -1124,127 +998,22 @@
             "type": "prometheus",
             "uid": "$datasource"
           },
-          "exemplar": true,
-          "expr": "sum by (instance)(rate(rest_client_requests_total{job=\"$job\",code=~\"2..\"}[$__rate_interval]))",
-          "format": "time_series",
-          "hide": true,
-          "instant": false,
-          "interval": "$__rate_interval",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}} 2xx",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "exemplar": true,
-          "expr": "sum by (instance)(rate(rest_client_requests_total{job=\"$job\",code=~\"4..\"}[$__rate_interval]))",
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum by (instance,code)(rate(rest_client_requests_total{job=\"$job\", code!~\"2..\", code!~\"<error>\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "interval": "$__rate_interval",
           "intervalFactor": 1,
-          "legendFormat": "{{instance}} 4xx",
-          "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "exemplar": true,
-          "expr": "sum by (instance)(rate(rest_client_requests_total{job=\"$job\",code=~\"5..\"}[$__rate_interval]))",
-          "format": "time_series",
-          "instant": false,
-          "interval": "$__rate_interval",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}} 5xx",
-          "refId": "D"
+          "legendFormat": "{{code}} - {{instance}}",
+          "refId": "A"
         }
       ],
-      "title": "Client Request Rate by Code",
+      "title": "Client Error Rates by Code",
       "transformations": [],
       "transparent": true,
       "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "continuous-BlPu"
-          },
-          "custom": {
-            "fillOpacity": 72,
-            "lineWidth": 2,
-            "spanNulls": false
-          },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 11,
-        "w": 24,
-        "x": 0,
-        "y": 53
-      },
-      "id": 63,
-      "maxDataPoints": 50,
-      "options": {
-        "alignValue": "center",
-        "legend": {
-          "displayMode": "hidden",
-          "placement": "bottom"
-        },
-        "mergeValues": false,
-        "rowHeight": 0.77,
-        "showValue": "always",
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "8.4.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "exemplar": false,
-          "expr": "topk(2, histogram_quantile(0.90, sum without(instance,type,operation) (increase(apiserver_admission_webhook_admission_duration_seconds_bucket{job=\"$job\"}[$__rate_interval]))))",
-          "hide": false,
-          "interval": "$__rate_interval",
-          "intervalFactor": 1,
-          "legendFormat": "{{name}}",
-          "refId": "B"
-        }
-      ],
-      "title": "Admission Webhook Admission Duration",
-      "transparent": true,
-      "type": "state-timeline"
     },
     {
       "datasource": {
@@ -1335,10 +1104,9 @@
         "h": 13,
         "w": 24,
         "x": 0,
-        "y": 64
+        "y": 54
       },
       "id": 59,
-      "interval": "2m",
       "maxDataPoints": 500,
       "options": {
         "legend": {
@@ -1359,7 +1127,7 @@
             "type": "prometheus",
             "uid": "$datasource"
           },
-          "exemplar": true,
+          "exemplar": false,
           "expr": "rate(process_cpu_seconds_total{job=\"$job\"}[$__rate_interval])",
           "interval": "$__rate_interval",
           "intervalFactor": 1,
@@ -1370,6 +1138,276 @@
       "title": "API Server CPU usage in CPU Seconds",
       "transparent": true,
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisGridShow": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "points",
+            "fillOpacity": 19,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 19,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 67
+      },
+      "id": 63,
+      "maxDataPoints": 100,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.4.6",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "exemplar": false,
+          "expr": "topk(4, histogram_quantile(0.90, sum without(instance,type,operation) (increase(apiserver_admission_webhook_admission_duration_seconds_bucket{job=\"$job\"}[$__rate_interval]))))",
+          "hide": false,
+          "interval": "$__rate_interval",
+          "intervalFactor": 1,
+          "legendFormat": "{{name}}",
+          "refId": "B"
+        }
+      ],
+      "title": "Admission Webhook Admission Duration",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisGridShow": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "points",
+            "fillOpacity": 19,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 19,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 78
+      },
+      "id": 78,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.4.6",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "exemplar": false,
+          "expr": "topk(5, code_resource:apiserver_request_total:rate5m)",
+          "hide": false,
+          "interval": "5m",
+          "intervalFactor": 1,
+          "legendFormat": "{{resources}} - {{verb}}",
+          "refId": "B"
+        }
+      ],
+      "title": "apiserver request total",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-blue",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 11,
+        "x": 0,
+        "y": 89
+      },
+      "id": 36,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "exemplar": false,
+          "expr": "go_threads{job=\"$job\"}",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Max Go Threads",
+      "transparent": true,
+      "type": "stat"
     },
     {
       "datasource": {
@@ -1400,12 +1438,11 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 24,
-        "x": 0,
-        "y": 77
+        "w": 13,
+        "x": 11,
+        "y": 89
       },
       "id": 10,
-      "interval": "5m",
       "options": {
         "colorMode": "background",
         "graphMode": "area",
@@ -1421,7 +1458,7 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.4.7",
+      "pluginVersion": "8.4.2",
       "targets": [
         {
           "datasource": {
@@ -1437,6 +1474,89 @@
         }
       ],
       "title": "Deprecated Api Usage Count",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 96
+      },
+      "id": 75,
+      "panels": [],
+      "title": "Advanced Priority and Fairness",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 97
+      },
+      "id": 61,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max without(instance)(apiserver_flowcontrol_request_concurrency_limit{job=\"$job\"})",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{priority_level}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Shared concurrency limit by priority group",
       "transparent": true,
       "type": "stat"
     },
@@ -1457,7 +1577,7 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "bars",
-            "fillOpacity": 61,
+            "fillOpacity": 25,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -1465,7 +1585,7 @@
               "viz": false
             },
             "lineInterpolation": "smooth",
-            "lineWidth": 4,
+            "lineWidth": 3,
             "pointSize": 3,
             "scaleDistribution": {
               "type": "linear"
@@ -1500,10 +1620,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
+        "h": 11,
         "w": 24,
         "x": 0,
-        "y": 84
+        "y": 100
       },
       "id": 47,
       "maxDataPoints": 500,
@@ -1528,18 +1648,18 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "100 * max by (priority_level)(apiserver_flowcontrol_current_executing_requests{job=\"$job\"}) / max by (priority_level) (apiserver_flowcontrol_request_concurrency_limit{job=\"$job\"})",
+          "exemplar": false,
+          "expr": "100 * max by (priority_level)(apiserver_flowcontrol_current_executing_requests{job=\"$job\"}) / max by (priority_level) (apiserver_flowcontrol_request_concurrency_limit{job=\"$job\"}) ",
           "hide": false,
           "instant": false,
-          "interval": "",
+          "interval": "$__interval",
           "intervalFactor": 1,
           "legendFormat": "{{priority_level}}",
           "range": false,
           "refId": "B"
         }
       ],
-      "title": "concurrency limits vs. executing requests",
+      "title": "% of priority level max shares used",
       "transparent": true,
       "type": "timeseries"
     },
@@ -1548,11 +1668,40 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
+      "description": "Number of requests in initial (for a WATCH) or any (for a non-WATCH) execution stage in the API Priority and Fairness subsystem",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "blue",
-            "mode": "fixed"
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisGridShow": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "points",
+            "fillOpacity": 100,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 11,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
@@ -1567,32 +1716,34 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
+        "h": 10,
         "w": 24,
         "x": 0,
-        "y": 94
+        "y": 111
       },
-      "id": 61,
+      "id": 76,
+      "maxDataPoints": 500,
       "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
+        "legend": {
           "calcs": [
             "max"
           ],
-          "fields": "",
-          "values": false
+          "displayMode": "table",
+          "placement": "right",
+          "sortBy": "Max",
+          "sortDesc": true
         },
-        "textMode": "auto"
+        "tooltip": {
+          "mode": "single",
+          "sort": "desc"
+        }
       },
-      "pluginVersion": "8.4.7",
       "targets": [
         {
           "datasource": {
@@ -1601,17 +1752,114 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "max without(instance)(apiserver_flowcontrol_request_concurrency_limit{job=\"$job\"})",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{priority_level}}",
+          "expr": "topk(5, max without (endpoint,namespace,service) (apiserver_flowcontrol_current_executing_requests{job=\"$job\"}))",
+          "interval": "$__rate_interval",
+          "legendFormat": "{{flow_schema}} - {{priority_level}}",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "Shared concurrency limit by priority group",
+      "title": "Top executing requests by Flow",
       "transparent": true,
-      "type": "stat"
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "description": "Length of time a request spent waiting in its queue - Max of APIservers",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisGridShow": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 11,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 4,
+            "pointSize": 8,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 121
+      },
+      "id": 51,
+      "maxDataPoints": 500,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "sortBy": "Max",
+          "sortDesc": false
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "exemplar": false,
+          "expr": "histogram_quantile(0.90, max without (instance) (increase(apiserver_flowcontrol_request_wait_duration_seconds_bucket{}[$__rate_interval])))",
+          "interval": "$__rate_interval",
+          "legendFormat": "{{flow_schema}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Time Request was in queue by flowschema (p90) ",
+      "transparent": true,
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -1675,7 +1923,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 97
+        "y": 131
       },
       "id": 71,
       "maxDataPoints": 500,
@@ -1720,273 +1968,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "Number of requests currently pending in queues of the API Priority and Fairness system",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "blue",
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 24,
-        "x": 0,
-        "y": 106
-      },
-      "id": 69,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "max"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.7",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "max without(instance)(apiserver_flowcontrol_current_inqueue_requests{job=\"$job\"})",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{priority_level}}",
-          "refId": "A"
-        }
-      ],
-      "title": "requests currently pending in queues by priority group",
-      "transparent": true,
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisGridShow": false,
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "points",
-            "fillOpacity": 52,
-            "gradientMode": "opacity",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "smooth",
-            "lineWidth": 8,
-            "pointSize": 19,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 1,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 13,
-        "w": 24,
-        "x": 0,
-        "y": 109
-      },
-      "id": 53,
-      "maxDataPoints": 900,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "right"
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "8.4.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "exemplar": true,
-          "expr": "max by (instance,flow_schema,priority_level)(max_over_time(apiserver_flowcontrol_current_inqueue_requests{job=\"$job\"}[$__interval])) > 0.1",
-          "instant": false,
-          "interval": "$__interval",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Number of requests currently pending in queues over time",
-      "transformations": [],
-      "transparent": true,
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "blue",
-            "mode": "fixed"
-          },
-          "custom": {
-            "align": "center",
-            "displayMode": "color-background",
-            "filterable": true
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 12,
-        "w": 24,
-        "x": 0,
-        "y": 122
-      },
-      "id": 70,
-      "options": {
-        "footer": {
-          "enablePagination": false,
-          "fields": [
-            "Value"
-          ],
-          "reducer": [
-            "max"
-          ],
-          "show": false
-        },
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "flow_schema"
-          }
-        ]
-      },
-      "pluginVersion": "8.4.7",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "max by (flow_schema, priority_level)(apiserver_flowcontrol_current_inqueue_requests{job=\"$job\"})",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{priority_level}} - {{flow_schema}}",
-          "range": false,
-          "refId": "A"
-        }
-      ],
-      "title": "inqueue requests with Flow Schema",
-      "transformations": [
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true
-            },
-            "indexByName": {},
-            "renameByName": {}
-          }
-        }
-      ],
-      "transparent": true,
-      "type": "table"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "description": "long requests spent queued",
+      "description": "Duration of initial stage (for a WATCH) or any (for a non-WATCH) stage of request execution in the API Priority and Fairness subsystem",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1998,218 +1980,16 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "bars",
-            "fillOpacity": 100,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "smooth",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 24,
-        "x": 0,
-        "y": 134
-      },
-      "id": 51,
-      "interval": "2m",
-      "maxDataPoints": 500,
-      "options": {
-        "legend": {
-          "calcs": [
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "right",
-          "sortBy": "Max",
-          "sortDesc": false
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "exemplar": false,
-          "expr": "histogram_quantile(0.90, max without (instance) (increase(apiserver_flowcontrol_request_wait_duration_seconds_bucket{}[$__rate_interval])))",
-          "interval": "$__rate_interval",
-          "legendFormat": "{{flow_schema}}",
-          "refId": "A"
-        }
-      ],
-      "title": "p90 Request Wait Duration (Max of all API Servers)",
-      "transparent": true,
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisGridShow": false,
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "smooth",
-            "lineWidth": 6,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 24,
-        "x": 0,
-        "y": 143
-      },
-      "id": 72,
-      "interval": "2m",
-      "maxDataPoints": 500,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "8.4.2",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum by (phase,priority_level,instance)(histogram_quantile(0.90, increase(apiserver_flowcontrol_priority_level_request_count_samples_bucket{job=\"$job\"}[$__rate_interval]))) > 0.1",
-          "format": "time_series",
-          "instant": false,
-          "interval": "$__rate_interval",
-          "legendFormat": "",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "priority level request count p 90",
-      "transformations": [],
-      "transparent": true,
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "description": "long requests spent queued",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisGridShow": false,
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "points",
-            "fillOpacity": 42,
+            "fillOpacity": 19,
             "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "stepAfter",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 7,
-            "pointSize": 16,
+            "lineInterpolation": "smooth",
+            "lineWidth": 5,
+            "pointSize": 9,
             "scaleDistribution": {
               "type": "linear"
             },
@@ -2230,10 +2010,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -2245,102 +2021,9 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 152
+        "y": 140
       },
-      "id": 49,
-      "maxDataPoints": 500,
-      "options": {
-        "legend": {
-          "calcs": [
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "right",
-          "sortBy": "Max",
-          "sortDesc": false
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "exemplar": false,
-          "expr": "histogram_quantile(0.90, max without (instance) (increase(apiserver_flowcontrol_request_execution_seconds_bucket{job=\"$job\"}[$__rate_interval])))",
-          "interval": "$__rate_interval",
-          "legendFormat": "{{flow_schema}}",
-          "refId": "A"
-        }
-      ],
-      "title": "P90 How Long Requests Took to Execute (Max of Servers)",
-      "transparent": true,
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisGridShow": false,
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "bars",
-            "fillOpacity": 42,
-            "gradientMode": "opacity",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "smooth",
-            "lineWidth": 8,
-            "pointSize": 20,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 15,
-        "w": 24,
-        "x": 0,
-        "y": 162
-      },
-      "id": 55,
+      "id": 77,
       "maxDataPoints": 400,
       "options": {
         "legend": {
@@ -2349,7 +2032,9 @@
             "max"
           ],
           "displayMode": "table",
-          "placement": "right"
+          "placement": "right",
+          "sortBy": "Max",
+          "sortDesc": false
         },
         "tooltip": {
           "mode": "multi",
@@ -2365,15 +2050,15 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "max without (endpoint,namespace,service) (apiserver_flowcontrol_current_executing_requests{job=\"$job\"}) > 0.5",
+          "expr": "histogram_quantile(0.90, max without (instance) (increase(apiserver_flowcontrol_request_execution_seconds_bucket{job=\"$job\"}[$__rate_interval])))",
           "instant": false,
-          "interval": "",
-          "legendFormat": " {{instance}}: {{flow_schema}} {{priority_level}}",
+          "interval": "$__rate_interval",
+          "legendFormat": "{{flow_schema}} - {{priority_level}}",
           "rawQuery": true,
           "refId": "A"
         }
       ],
-      "title": "Highest Current Executing Request",
+      "title": "Flowcontrol request execution time p90",
       "transparent": true,
       "type": "timeseries"
     },
@@ -2382,7 +2067,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "",
+      "description": "Length of queue in the API Priority and Fairness subsystem, as seen by each request after it is enqueued",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2393,7 +2078,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "drawStyle": "line",
+            "drawStyle": "points",
             "fillOpacity": 49,
             "gradientMode": "opacity",
             "hideFrom": {
@@ -2403,7 +2088,7 @@
             },
             "lineInterpolation": "smooth",
             "lineWidth": 5,
-            "pointSize": 20,
+            "pointSize": 9,
             "scaleDistribution": {
               "type": "linear"
             },
@@ -2431,10 +2116,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 15,
+        "h": 6,
         "w": 24,
         "x": 0,
-        "y": 177
+        "y": 150
       },
       "id": 73,
       "maxDataPoints": 400,
@@ -2448,7 +2133,7 @@
           "placement": "right"
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "desc"
         }
       },
@@ -2461,7 +2146,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (instance,priority_level,flow_schema)(increase(apiserver_flowcontrol_request_queue_length_after_enqueue_count{}[$__rate_interval]))",
+          "expr": "topk(5, sum by (instance,priority_level,flow_schema)(rate(apiserver_flowcontrol_request_queue_length_after_enqueue_count{}[$__rate_interval])))",
           "instant": false,
           "interval": "$__rate_interval",
           "legendFormat": " {{instance}}: {{flow_schema}} {{priority_level}}",
@@ -2469,85 +2154,17 @@
           "refId": "A"
         }
       ],
-      "title": "queue length after enqueue",
+      "title": "Rate of addition per second",
       "transparent": true,
       "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "continuous-BlPu"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "semi-dark-blue",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 24,
-        "x": 0,
-        "y": 192
-      },
-      "id": 36,
-      "interval": "2m",
-      "options": {
-        "colorMode": "background",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.7",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "exemplar": false,
-          "expr": "go_threads{job=\"$job\"}",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Max Go Threads",
-      "transparent": true,
-      "type": "stat"
     }
   ],
-  "refresh": "2m",
+  "refresh": "",
   "schemaVersion": 35,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "RiskyAdventure"
+  ],
   "templating": {
     "list": [
       {
@@ -2576,8 +2193,8 @@
       {
         "current": {
           "selected": false,
-          "text": "Prometheus ws-641df7c9-35d5-4cda-89e0-dc2dc873262d",
-          "value": "Prometheus ws-641df7c9-35d5-4cda-89e0-dc2dc873262d"
+          "text": "Prometheus",
+          "value": "Prometheus"
         },
         "hide": 2,
         "includeAll": false,
@@ -2594,19 +2211,20 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-2d",
     "to": "now"
   },
   "timepicker": {
     "hidden": false,
     "nowDelay": "",
     "refresh_intervals": [
-      "2m"
+      "2m",
+      "5m"
     ]
   },
   "timezone": "browser",
-  "title": "API Server flow control v1.3.1",
+  "title": "API Server Troubleshooter v1.5.4",
   "uid": "U3y_Zcb7k",
-  "version": 4,
+  "version": 12,
   "weekStart": ""
 }
