@@ -6,7 +6,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "8.4.2"
+      "version": "8.5.0"
     },
     {
       "type": "panel",
@@ -60,7 +60,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1653048779412,
+  "iteration": 1653064238596,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -114,7 +114,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "8.5.0",
       "targets": [
         {
           "datasource": {
@@ -184,7 +184,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "8.5.0",
       "targets": [
         {
           "datasource": {
@@ -257,7 +257,7 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "8.5.0",
       "targets": [
         {
           "datasource": {
@@ -327,7 +327,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "8.5.0",
       "targets": [
         {
           "datasource": {
@@ -396,7 +396,7 @@
         },
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "8.5.0",
       "targets": [
         {
           "datasource": {
@@ -1327,12 +1327,14 @@
             "type": "prometheus",
             "uid": "$datasource"
           },
+          "editorMode": "code",
           "exemplar": false,
           "expr": "topk(5, code_resource:apiserver_request_total:rate5m)",
           "hide": false,
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "{{resources}} - {{verb}}",
+          "legendFormat": "{{resource}} - {{verb}}",
+          "range": true,
           "refId": "B"
         }
       ],
@@ -1390,7 +1392,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "8.5.0",
       "targets": [
         {
           "datasource": {
@@ -1458,7 +1460,7 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "8.5.0",
       "targets": [
         {
           "datasource": {
@@ -1479,6 +1481,10 @@
     },
     {
       "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1539,7 +1545,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "8.5.0",
       "targets": [
         {
           "datasource": {
@@ -2160,7 +2166,7 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 35,
+  "schemaVersion": 36,
   "style": "dark",
   "tags": [
     "RiskyAdventure"
@@ -2223,8 +2229,8 @@
     ]
   },
   "timezone": "browser",
-  "title": "API Server Troubleshooter v1.5.4",
+  "title": "API Server Troubleshooter v1.5.5",
   "uid": "U3y_Zcb7k",
-  "version": 12,
+  "version": 2,
   "weekStart": ""
 }
