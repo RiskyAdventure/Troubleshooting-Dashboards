@@ -60,7 +60,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1653494369334,
+  "iteration": 1653569486444,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -715,7 +715,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "light-blue"
+                "color": "light-blue",
+                "value": null
               },
               {
                 "color": "light-yellow",
@@ -818,7 +819,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "light-blue"
+                "color": "light-blue",
+                "value": null
               },
               {
                 "color": "light-yellow",
@@ -1058,7 +1060,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -1182,7 +1185,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1232,7 +1236,7 @@
           "refId": "B"
         }
       ],
-      "title": "Admission Webhook Admission Duration",
+      "title": "Admission Webhook Admission Duration -Top 4",
       "transparent": true,
       "type": "timeseries"
     },
@@ -1282,7 +1286,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1353,7 +1358,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-blue"
+                "color": "semi-dark-blue",
+                "value": null
               },
               {
                 "color": "red",
@@ -1420,7 +1426,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1505,7 +1512,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1604,7 +1612,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1705,7 +1714,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1718,7 +1728,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
+        "h": 9,
         "w": 24,
         "x": 0,
         "y": 111
@@ -1750,7 +1760,7 @@
           "exemplar": false,
           "expr": "topk(5, max without (endpoint,namespace,service) (apiserver_flowcontrol_current_executing_requests{job=\"$job\"}))",
           "interval": "$__rate_interval",
-          "legendFormat": "{{flow_schema}} - {{priority_level}}",
+          "legendFormat": "Flow: {{flow_schema}} --Priority Level: {{priority_level}} -- {{instance}}",
           "range": true,
           "refId": "A"
         }
@@ -1804,7 +1814,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1820,7 +1831,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 121
+        "y": 120
       },
       "id": 51,
       "maxDataPoints": 500,
@@ -1852,7 +1863,7 @@
           "refId": "A"
         }
       ],
-      "title": "Time Request was in queue by flowschema (p90) ",
+      "title": "Time Request was in queue by flowschema (p90) - Top Instance",
       "transparent": true,
       "type": "timeseries"
     },
@@ -1901,7 +1912,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1917,7 +1929,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 131
+        "y": 130
       },
       "id": 71,
       "maxDataPoints": 500,
@@ -2002,7 +2014,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -2014,7 +2027,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 140
+        "y": 139
       },
       "id": 77,
       "maxDataPoints": 400,
@@ -2051,7 +2064,7 @@
           "refId": "A"
         }
       ],
-      "title": "Flowcontrol request execution time p90",
+      "title": "Flowcontrol request execution time p90 - Top Instance",
       "transparent": true,
       "type": "timeseries"
     },
@@ -2100,7 +2113,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           }
@@ -2108,10 +2122,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 12,
         "w": 24,
         "x": 0,
-        "y": 150
+        "y": 149
       },
       "id": 73,
       "maxDataPoints": 400,
@@ -2122,7 +2136,7 @@
             "max"
           ],
           "displayMode": "table",
-          "placement": "right"
+          "placement": "bottom"
         },
         "tooltip": {
           "mode": "multi",
@@ -2141,7 +2155,7 @@
           "expr": "topk(5, sum by (instance,priority_level,flow_schema)(rate(apiserver_flowcontrol_request_queue_length_after_enqueue_count{}[$__rate_interval])))",
           "instant": false,
           "interval": "$__rate_interval",
-          "legendFormat": " {{instance}}: {{flow_schema}} {{priority_level}}",
+          "legendFormat": "Flow: {{flow_schema}} --Priority: {{priority_level}} --{{instance}}",
           "rawQuery": true,
           "refId": "A"
         }
@@ -2215,8 +2229,8 @@
     ]
   },
   "timezone": "browser",
-  "title": "API Server Troubleshooter v1.5.6",
+  "title": "API Server Troubleshooter v1.5.7",
   "uid": "U3y_Zcb7k",
-  "version": 2,
+  "version": 4,
   "weekStart": ""
 }
