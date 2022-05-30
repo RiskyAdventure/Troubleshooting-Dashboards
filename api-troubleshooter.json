@@ -60,7 +60,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1653569486444,
+  "iteration": 1653921826037,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -655,7 +655,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "topk(3, cluster_quantile:apiserver_request_duration_seconds:histogram_quantile{job=\"apiserver\",quantile=\"0.9\"})",
+          "expr": "topk(3, cluster_quantile:apiserver_request_duration_seconds:histogram_quantile{job=\"$job\",quantile=\"0.9\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -665,7 +665,7 @@
           "refId": "B"
         }
       ],
-      "title": "Top 5 Slowest Requests (P90) - 5min",
+      "title": "Slowest Requests (P90) - 5min",
       "transparent": true,
       "type": "timeseries"
     },
@@ -709,7 +709,6 @@
               "mode": "off"
             }
           },
-          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -724,7 +723,7 @@
               }
             ]
           },
-          "unit": "reqps"
+          "unit": "none"
         },
         "overrides": []
       },
@@ -736,7 +735,6 @@
       },
       "id": 64,
       "links": [],
-      "maxDataPoints": 500,
       "options": {
         "legend": {
           "calcs": [
@@ -759,7 +757,7 @@
             "uid": "$datasource"
           },
           "exemplar": false,
-          "expr": "sum by (instance)(rate(apiserver_current_inflight_requests{job=\"$job\"}[$__rate_interval]))",
+          "expr": "sum by (instance)(max_over_time(apiserver_current_inflight_requests{job=\"$job\"}[$__rate_interval]))",
           "format": "time_series",
           "instant": false,
           "interval": "$__rate_interval",
@@ -778,7 +776,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "Request rate by error code",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -789,7 +787,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "drawStyle": "bars",
+            "drawStyle": "points",
             "fillOpacity": 20,
             "gradientMode": "none",
             "hideFrom": {
@@ -799,7 +797,7 @@
             },
             "lineInterpolation": "smooth",
             "lineWidth": 8,
-            "pointSize": 5,
+            "pointSize": 11,
             "scaleDistribution": {
               "type": "linear"
             },
@@ -813,7 +811,6 @@
               "mode": "off"
             }
           },
-          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -828,145 +825,9 @@
               }
             ]
           },
-          "unit": "cps"
+          "unit": "none"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.136.142:443 2xx"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.189.176:443 5xx"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "super-light-red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.189.176:443 2xx"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "light-blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.136.142:443 4xx"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "super-light-yellow",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.189.176:443 4xx"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-yellow",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.125.195:443 4xx"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-yellow",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.128.251:443 4xx"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "super-light-yellow",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.125.195:443 5xx"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "192.168.128.251:443 5xx"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "super-light-red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 9,
@@ -976,7 +837,7 @@
       },
       "id": 45,
       "links": [],
-      "maxDataPoints": 400,
+      "maxDataPoints": 1000,
       "options": {
         "legend": {
           "calcs": [
@@ -1000,7 +861,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (instance,code)(rate(rest_client_requests_total{job=\"$job\", code!~\"2..\", code!~\"<error>\"}[$__rate_interval]))",
+          "expr": "sum by (instance,code)(increase(rest_client_requests_total{job=\"$job\", code!~\"2..\", code!~\"<error>\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1010,7 +871,7 @@
           "refId": "A"
         }
       ],
-      "title": "Client Error Rates by Code",
+      "title": "% Client Error Rate - 2m",
       "transformations": [],
       "transparent": true,
       "type": "timeseries"
@@ -1843,7 +1704,7 @@
           "displayMode": "table",
           "placement": "right",
           "sortBy": "Max",
-          "sortDesc": false
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "multi",
@@ -1872,7 +1733,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "Concurrency (number of seats) occupied by the currently executing (all phases count) requests",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1893,7 +1754,7 @@
             },
             "lineInterpolation": "smooth",
             "lineWidth": 6,
-            "pointSize": 8,
+            "pointSize": 14,
             "scaleDistribution": {
               "type": "linear"
             },
@@ -1965,7 +1826,7 @@
           "refId": "A"
         }
       ],
-      "title": "Rejected Requests",
+      "title": "Rejected Requests -2m",
       "transparent": true,
       "type": "timeseries"
     },
@@ -2040,7 +1901,7 @@
           "displayMode": "table",
           "placement": "right",
           "sortBy": "Max",
-          "sortDesc": false
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "multi",
@@ -2229,8 +2090,8 @@
     ]
   },
   "timezone": "browser",
-  "title": "API Server Troubleshooter v1.5.7",
+  "title": "API Server Troubleshooter v1.5.10",
   "uid": "U3y_Zcb7k",
-  "version": 4,
+  "version": 23,
   "weekStart": ""
 }
