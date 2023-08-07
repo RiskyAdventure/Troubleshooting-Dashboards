@@ -335,7 +335,7 @@
             "uid": "$datasource"
           },
           "exemplar": false,
-          "expr": "topk(5, max by (kind)(apiserver_registered_watchers{job=\"$job\"}))",
+          "expr": "topk(5, max by (kind)(apiserver_longrunning_requests{job=\"$job\"}))",
           "instant": true,
           "interval": "",
           "legendFormat": "{{kind}}",
